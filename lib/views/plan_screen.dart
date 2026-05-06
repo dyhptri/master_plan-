@@ -57,10 +57,10 @@ class _PlanScreenState extends State<PlanScreen> {
     return FloatingActionButton(
       child: const Icon(Icons.add),
       onPressed: () {
-        Plan currentPlan = plan;
         int planIndex = planNotifier.value.indexWhere(
-          (p) => p.name == currentPlan.name,
+          (p) => p.name == plan.name,
         );
+        Plan currentPlan = planNotifier.value[planIndex];
         List<Task> updatedTasks = List<Task>.from(currentPlan.tasks)
           ..add(const Task());
         planNotifier.value = List<Plan>.from(planNotifier.value)
@@ -69,12 +69,12 @@ class _PlanScreenState extends State<PlanScreen> {
     );
   }
 
-  Widget _buildList(Plan plan) {
+  Widget _buildList(Plan currentPlan) {
     return ListView.builder(
       controller: scrollController,
-      itemCount: plan.tasks.length,
+      itemCount: currentPlan.tasks.length,
       itemBuilder: (context, index) =>
-          _buildTaskTile(plan.tasks[index], index, context),
+          _buildTaskTile(currentPlan.tasks[index], index, context),
     );
   }
 
@@ -85,10 +85,10 @@ class _PlanScreenState extends State<PlanScreen> {
       leading: Checkbox(
         value: task.complete,
         onChanged: (selected) {
-          Plan currentPlan = plan;
           int planIndex = planNotifier.value.indexWhere(
-            (p) => p.name == currentPlan.name,
+            (p) => p.name == plan.name,
           );
+          Plan currentPlan = planNotifier.value[planIndex];
           planNotifier.value = List<Plan>.from(planNotifier.value)
             ..[planIndex] = Plan(
               name: currentPlan.name,
@@ -103,10 +103,10 @@ class _PlanScreenState extends State<PlanScreen> {
       title: TextFormField(
         initialValue: task.description,
         onChanged: (text) {
-          Plan currentPlan = plan;
           int planIndex = planNotifier.value.indexWhere(
-            (p) => p.name == currentPlan.name,
+            (p) => p.name == plan.name,
           );
+          Plan currentPlan = planNotifier.value[planIndex];
           planNotifier.value = List<Plan>.from(planNotifier.value)
             ..[planIndex] = Plan(
               name: currentPlan.name,
